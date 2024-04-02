@@ -1,0 +1,20 @@
+[
+  {
+    "title": "producto 1",
+    "description": "Este es un producto prueba1",
+    "price": 10,
+    "thumbnail": "Sin imagen 1",
+    "code": "c1",
+    "stock": 10,
+    "id": 1
+  },
+  {
+    "title": "producto modificado",
+    "description": "Este es un producto modificado",
+    "price": 700,
+    "thumbnail": "Sin imagen modificada",
+    "code": "c3",
+    "stock": 777,
+    "id": 3
+  }
+]
