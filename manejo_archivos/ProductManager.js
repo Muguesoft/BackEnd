@@ -2,9 +2,9 @@ const fs = require('fs').promises
 
 // CLASE PRODUCTMANAGER.
 class productManager{
-    constructor() {
-        this.path = './'
-        this.productsFile = this.path+'products.txt'
+    constructor(path) {
+        this.productsFile = path
+        this.newId = 0
     }
 
     // INICIO METODO PARA AGREGAR PRODUCTO.
@@ -16,38 +16,32 @@ class productManager{
 
             // Validacion de titulo.
             if (!product.title) {
-                console.log('Debe ingresar un título del producto')
-                return
+                return 'Debe ingresar un título del producto'
             }
 
             // Validacion de descripcion.
             if (!product.description) {
-                console.log('Debe ingresar una descripción del producto')
-                return
+                return 'Debe ingresar una descripción del producto'
             }
 
             // Validacion de precio mayor a 0.
             if (product.price <= 0) {
-                console.log('Debe ingresar un precio del producto mayor a 0')
-                return
+                return 'Debe ingresar un precio del producto mayor a 0'
             }
 
             // Validacion de thumbnail.
             if (!product.thumbnail) {
-                console.log('Debe ingresar un thumbnail del producto')
-                return
+                return 'Debe ingresar un thumbnail del producto'
             }
 
             // Validacion de code.
             if (!product.code) {
-                console.log('Debe ingresar un código del producto')
-                return
+                return 'Debe ingresar un código del producto'
             }
 
             // Validacion de stock mayor o igual a 0.
             if (product.stock < 0) {
-                console.log('Debe ingresar un stock del producto mayor ó igual a 0')
-                return
+                return 'Debe ingresar un stock del producto mayor ó igual a 0'
             }
 
             //////////////////
@@ -57,24 +51,37 @@ class productManager{
 
             // Valida que no exista el codigo.
             if (products.find(productos => productos.code === product.code)){
-                console.log('El código de producto ingresado ya existe')
-                return
+                return 'El código de producto ingresado ya existe'
             }
 
             // Si paso las validaciones se agrega al array.
-            const newId = products.length + 1
-            product.id = newId
+            this.newId = this.newId + 1
+            product.id = this.newId 
             products.push(product)
 
             // Escribe el archivo.
-            await fs.writeFile(this.productsFile, JSON.stringify(products, null, 2))
-            console.log(`Producto ${newId} agregado correctamente`);
+            let resp = this.writeProducts(products)
             
+            // Retorna respuesta de funcion de escritura.
+            return resp
+
         } catch (error) {
-            console.error("Error al crear el producto", error)
+            return error
         }
     }
     // FIN METODO PARA AGREGAR PRODUCTO.
+
+    // INICIO DE METODO PARA ESCRIBIR ARCHIVO DE PRODUCTOS.
+    async writeProducts(products) {
+        try {
+            await fs.writeFile(this.productsFile, JSON.stringify(products, null, 2)) 
+            return 'ok'
+
+        } catch (error) {
+            throw error
+        }  
+    }
+    // FIN DE METODO PARA ESCRIBIR ARCHIVO DE PRODUCTOS.
 
 
     // INICIO METODO PARA DEVOLVER PRODUCTOS.
@@ -87,7 +94,7 @@ class productManager{
             if (error.code === 'ENOENT') {
                 return []
             } else {
-                throw error
+                return error
             }
         }
     }
@@ -116,10 +123,8 @@ class productManager{
         }
         
         if (!productFind) {
-            console.log(`No existe un producto con el ${message} ${idCode}`)
-            return
+            return `${message}`
         } else {
-            console.log(`Producto con el ${message} ${idCode} encontrado`,productFind)
             return productFind
         }
     }
@@ -142,21 +147,25 @@ class productManager{
                 products.splice(index,1)
 
                 // Escribe el archivo.
-                await fs.writeFile(this.productsFile, JSON.stringify(products, null, 2))
-                console.log(`Producto con ID ${id} eliminado correctamente`);
+                let resp = this.writeProducts(products)
+                return resp
             } else {
-                console.log('El ID ingresado no existe; por lo tanto es imposible borrar');
+                return `El ID ingresado ${id} no existe; por lo tanto es imposible borrar`
             }  
 
         } catch (error) {
-            console.log(`Error borrando producto con ID ${id}`,error);
+            return error;
         } 
     }
     // FIN METODO PARA BORRAR PRODUCTO POR ID.
 
 
-    // INICIO METODO PARA ACTUALIZAR PRODUCTO POR ID.
+    // INICIO METODO PARA ACTUALIZAR PRODUCTO.
     async updateProductById(id,productModif){
+        // Para evitar si se envia un ID en el objeto productoModif
+        // se modifique el ID erroneamente.
+        productModif.id = id
+        
         try {
             // Leer archivo de productos.
             let products = await this.getProducts()
@@ -170,15 +179,15 @@ class productManager{
                 Object.assign(products[index],productModif)
 
                 // Escribe el archivo.
-                await fs.writeFile(this.productsFile, JSON.stringify(products, null, 2))
-                console.log(`Producto con ID ${id} modificado correctamente`);
+                let resp = this.writeProducts(products)
+                return resp
             } else {
-                console.log('El ID ingresado no existe; por lo tanto es imposible modificar');
+                return 'El ID ingresado no existe; por lo tanto es imposible modificar';
             }
         }
 
         catch (error) {
-            console.log(`Error actualizando producto con ID ${id}`,error);
+            return `Error actualizando producto con ID ${id}`;
         }
     }
     // FIN METODO PARA ACTUALIZAR PRODUCTO POR ID.
@@ -188,9 +197,14 @@ class productManager{
     async deleteFile() {
         try {
             await fs.unlink(this.productsFile)
-            console.log("Archivo eliminado correctamente")
+            return 'ok'
+            
         } catch (error) {
-            console.error("No se pudo eliminar el archivo", error)
+            if (error.code === 'ENOENT') {
+                return 'no encontrado'
+            } else {
+                return error
+            }
         }
     }
     // FIN DE METODO PARA BORRAR ARCHIVO.
@@ -198,7 +212,7 @@ class productManager{
 
 
 // Ejecucion de clase ProductManager.
-const productAdmin = new productManager()
+const productAdmin = new productManager('./products.json')
 
 /////////////
 // TESTING //
@@ -232,19 +246,38 @@ const producto3 = {
 }
 
 async function funcionesAsincronas() {
+    let resp
+
     // Elimina posible archivo creado.
-    await productAdmin.deleteFile()
+    resp = await productAdmin.deleteFile()
+    if (resp === 'ok') {
+        console.log('Archivo borrado correctamente.');
+    } else {
+        console.error('Error borrando archivo: ',resp);
+
+        // Si da error de borrado intenta continuar de todas maneras.
+    }
 
     // Agrega productos 1, 2 y 3.
-    await productAdmin.addProduct(producto1)
-    await productAdmin.addProduct(producto2)
-    await productAdmin.addProduct(producto3)
+    resp = await productAdmin.addProduct(producto1)
+    msgAddProduct(resp)
+
+    resp = await productAdmin.addProduct(producto2)
+    msgAddProduct(resp)
+
+    resp = await productAdmin.addProduct(producto3)
+    msgAddProduct(resp)
 
     // Busca el producto con ID2.
-    await productAdmin.getProductByIdCode(2,true)
-
-    // Borra el producto con ID2.
-    await productAdmin.deleteProductById(2)
+    const idCode = 2
+    resp = await productAdmin.getProductByIdCode(idCode,true)
+    if (resp === 'ID' || resp === 'Código') {
+        console.log(`No se encuentra el ${resp} ${idCode}...`);
+    } else {
+        // Borra el Producto encontrado.
+        resp = await productAdmin.deleteProductById(idCode)
+    }
+    
 
     // Muestra productos.
     const productos = await productAdmin.getProducts()
@@ -255,15 +288,48 @@ async function funcionesAsincronas() {
         title:'producto modificado',
         description:'Este es un producto modificado',
         price: 700,
-        thumbnail: 'Sin imagen modificada',
         stock: 777
     }
 
-    // Modifica con ID 3.
-    await productAdmin.updateProductById(3,productModif)
+    // Modifica .
+    resp = await productAdmin.updateProductById(3,productModif)
+    if (resp === 'ok') {
+        console.log(`Producto con ID ${productModif.id} modificado correctamente`);    
+    } else {
+        console.log(resp);
+    }
+    
     
     // Recupera el producto modificado por Code.
-    await productAdmin.getProductByIdCode('c3',false)
+    resp = await productAdmin.getProductByIdCode('c3',false)
+    if (resp === 'ID' || resp === 'Código') {
+        console.log(`No se encuentra el ${resp} ${idCode}...`);
+    } else {
+        // Muestra el Producto encontrado.
+        console.log(resp);
+    }
+
+    // Agrego nuevo producto
+    const producto4 = {
+        title:'producto 4',
+        description:'Este es un producto prueba4',
+        price: 40,
+        thumbnail: 'Sin imagen 4',
+        code: 'c4',
+        stock: 40
+    }
+
+    // Agrega producto 4.
+    resp = await productAdmin.addProduct(producto4)
+    msgAddProduct(resp)
 }
 
 funcionesAsincronas()
+
+function msgAddProduct(msg){
+    if (msg === 'ok') {
+        console.log(`Producto agregado correctamente con ID ${productAdmin.newId} .`);
+    } else {
+        console.log('Error agregando producto: ',msg);  
+    }
+}
