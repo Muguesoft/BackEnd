@@ -85,10 +85,18 @@ class productManager{
 
 
     // INICIO METODO PARA DEVOLVER PRODUCTOS.
-    async getProducts() {
+    async getProducts(limit) {
         try {
             let datos = await fs.readFile(this.productsFile, 'utf8')
-            return JSON.parse(datos)
+
+            let products = JSON.parse(datos)
+
+            // Si se proporciona el parámetro de límite, lo aplica.
+            if (limit) {
+                products = products.slice(0, limit);
+            }
+
+            return products;
 
         } catch (error) {
             if (error.code === 'ENOENT') {
@@ -211,127 +219,4 @@ class productManager{
 }
 
 
-// Ejecucion de clase ProductManager.
-const productAdmin = new productManager('./products.json')
-
-/////////////
-// TESTING //
-/////////////
-
-const producto1 = {
-    title:'producto 1',
-    description:'Este es un producto prueba1',
-    price: 10,
-    thumbnail: 'Sin imagen 1',
-    code: 'c1',
-    stock: 10
-}
-
-const producto2 = {
-    title:'producto 2',
-    description:'Este es un producto prueba2',
-    price: 20,
-    thumbnail: 'Sin imagen 2',
-    code: 'c2',
-    stock: 20
-}
-
-const producto3 = {
-    title:'producto 3',
-    description:'Este es un producto prueba3',
-    price: 30,
-    thumbnail: 'Sin imagen 3',
-    code: 'c3',
-    stock: 30
-}
-
-async function funcionesAsincronas() {
-    let resp
-
-    // Elimina posible archivo creado.
-    resp = await productAdmin.deleteFile()
-    if (resp === 'ok') {
-        console.log('Archivo borrado correctamente.');
-    } else {
-        console.error('Error borrando archivo: ',resp);
-
-        // Si da error de borrado intenta continuar de todas maneras.
-    }
-
-    // Agrega productos 1, 2 y 3.
-    resp = await productAdmin.addProduct(producto1)
-    msgAddProduct(resp)
-
-    resp = await productAdmin.addProduct(producto2)
-    msgAddProduct(resp)
-
-    resp = await productAdmin.addProduct(producto3)
-    msgAddProduct(resp)
-
-    /*
-    // Busca el producto con ID2.
-    const idCode = 2
-    resp = await productAdmin.getProductByIdCode(idCode,true)
-    if (resp === 'ID' || resp === 'Código') {
-        console.log(`No se encuentra el ${resp} ${idCode}...`);
-    } else {
-        // Borra el Producto encontrado.
-        resp = await productAdmin.deleteProductById(idCode)
-    }
-    
-
-    // Muestra productos.
-    const productos = await productAdmin.getProducts()
-    console.log(productos);
-
-    // Objeto con propiedades modificadas.
-    const productModif = {
-        title:'producto modificado',
-        description:'Este es un producto modificado',
-        price: 700,
-        stock: 777
-    }
-
-    // Modifica .
-    resp = await productAdmin.updateProductById(3,productModif)
-    if (resp === 'ok') {
-        console.log(`Producto con ID ${productModif.id} modificado correctamente`);    
-    } else {
-        console.log(resp);
-    }
-    
-    
-    // Recupera el producto modificado por Code.
-    resp = await productAdmin.getProductByIdCode('c3',false)
-    if (resp === 'ID' || resp === 'Código') {
-        console.log(`No se encuentra el ${resp} ${idCode}...`);
-    } else {
-        // Muestra el Producto encontrado.
-        console.log(resp);
-    }
-    */
-   
-    // Agrego nuevo producto
-    const producto4 = {
-        title:'producto 4',
-        description:'Este es un producto prueba4',
-        price: 40,
-        thumbnail: 'Sin imagen 4',
-        code: 'c4',
-        stock: 40
-    }
-
-    // Agrega producto 4.
-    resp = await productAdmin.addProduct(producto4)
-    msgAddProduct(resp)
-}
-
-funcionesAsincronas()
-
-function msgAddProduct(msg){
-    if (msg === 'ok') {
-        console.log(`Producto agregado correctamente con ID ${productAdmin.newId} .`);
-    } else {
-        console.log('Error agregando producto: ',msg);  
-    }
-}
+module.exports = productManager;
