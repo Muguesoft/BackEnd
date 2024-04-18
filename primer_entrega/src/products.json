@@ -1,0 +1,113 @@
+[
+  {
+    "title": "producto 1",
+    "description": "Este es un producto prueba1",
+    "price": 10,
+    "thumbnail": "Sin imagen 1",
+    "code": "c1",
+    "stock": 10,
+    "id": 1
+  },
+  {
+    "title": "act 2",
+    "description": "pr2",
+    "price": 2,
+    "thumbnail": "thumbnail22",
+    "code": "c2222",
+    "stock": 200,
+    "id": 2
+  },
+  {
+    "title": "act 2",
+    "description": "pr2",
+    "price": 2,
+    "thumbnail": "Sin imagen 3",
+    "code": "c3",
+    "stock": 200,
+    "id": 3
+  },
+  {
+    "title": "producto 4",
+    "description": "Este es un producto prueba4",
+    "price": 40,
+    "thumbnail": "Sin imagen 4",
+    "code": "c4",
+    "stock": 40,
+    "id": 4
+  },
+  {
+    "title": "producto 5",
+    "description": "Este es un producto prueba5",
+    "price": 50,
+    "thumbnail": "Sin imagen 5",
+    "code": "c5",
+    "stock": 50,
+    "id": 5
+  },
+  {
+    "title": "producto 6",
+    "description": "Este es un producto prueba6",
+    "price": 60,
+    "thumbnail": "Sin imagen 6",
+    "code": "c6",
+    "stock": 60,
+    "id": 6
+  },
+  {
+    "title": "producto 7",
+    "description": "Este es un producto prueba7",
+    "price": 70,
+    "thumbnail": "Sin imagen 7",
+    "code": "c7",
+    "stock": 70,
+    "id": 7
+  },
+  {
+    "title": "producto 9",
+    "description": "Este es un producto prueba9",
+    "price": 90,
+    "thumbnail": "Sin imagen 9",
+    "code": "c9",
+    "stock": 90,
+    "id": 9
+  },
+  {
+    "title": "producto 10",
+    "description": "Este es un producto prueba10",
+    "price": 100,
+    "thumbnail": "Sin imagen 10",
+    "code": "c10",
+    "stock": 100,
+    "id": 10
+  },
+  {
+    "title": "act z1",
+    "description": "prz1",
+    "price": 1999,
+    "stock": 1999,
+    "code": "c12999",
+    "thumbnail": [],
+    "id": 12
+  },
+  {
+    "title": "act z2",
+    "description": "prz2",
+    "price": 1999,
+    "stock": 1999,
+    "code": "c3999",
+    "thumbnail": [],
+    "id": 13
+  },
+  {
+    "title": "act z3",
+    "description": "prz3",
+    "price": 1999,
+    "stock": 1999,
+    "code": "curl",
+    "thumbnail": [
+      "url1",
+      "url2"
+    ],
+    "id": 14
+  }
+]
