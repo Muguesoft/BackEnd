@@ -37,7 +37,7 @@ class cartManager{
             const productsFile = await this.productManager.getProducts()
             
             // Validar que todos los productos en la solicitud existan            
-            let idNoExistente = productsCart.filter(prodCart => !productsFile.some(p => p.id === prodCart.product));
+            const idNoExistente = productsCart.filter(prodCart => !productsFile.some(p => p.id === prodCart.product));
             
 
             if (idNoExistente.length > 0) {
@@ -173,7 +173,7 @@ class cartManager{
         try {
 
             // Leer archivo de productos.
-            let carts = await this.getCarts()
+            const carts = await this.getCarts()
             
             // Busca el indice dentro del array con el ID a borrar.
             const index = carts.findIndex((cart) => cart.id === id)
@@ -184,7 +184,7 @@ class cartManager{
                 carts.splice(index,1)
 
                 // Escribe el archivo.
-                let resp = this.writeCarts(carts)
+                const resp = this.writeCarts(carts)
                 return resp
             } else {
                 return `El ID ingresado ${id} no existe; por lo tanto es imposible borrar`

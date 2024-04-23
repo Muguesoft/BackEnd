@@ -7,52 +7,6 @@ const router = Router();
 // INSTANCIACION DE CLASE CARTMANAGER.
 const manager = new cartManager('./carts.json','./products.json')
 
-// GET ALL PRODUCTS.
-/*router.get('/products',async (req,res) => {
-    try{
-        const limit = parseInt(req.query.limit)
-
-        let products
-
-        if (limit) {
-            // Muestra productos.
-            products = await manager.getProducts(limit)    
-        } else {
-            products = await manager.getProducts()
-        }
-
-        res.json(products)
-    }
-    catch(error){
-        res.status(500).json({error: "Error recuperando productos"})
-    }
-})
-
-
-
-
-
-
-// PUT ONE PRODUCT.
-router.put('/products/:pid', async (req, res) => {
-    try{
-        const id = parseInt(req.params.pid)
-
-        const productModif = req.body
-
-        // Modifica .
-        const resp = await manager.updateProductById(id,productModif)
-        if (resp === 'ok') {
-            res.json({message:`Producto con ID ${productModif.id} modificado correctamente`});    
-        } else {
-            res.json({error:resp})
-        }
-    }
-    catch(error){
-        res.status(500).json({error: "Error actualizando producto..."})
-    }
-})*/
-
 // POST NEW CART.
 router.post('/carts', async (req, res) => {
     try {
@@ -64,8 +18,7 @@ router.post('/carts', async (req, res) => {
             res.json({ message: 'Carrito creado correctamente' });
         } else {
             // Muestra error.
-            res.json({ errorssss: resp });
-            //res.send(resp)
+            res.json({ error: resp });
         }
     } catch (error) {
         res.status(500).json({ error: 'Error creando carrito...' });
@@ -80,7 +33,7 @@ router.get('/carts/:cid', async (req,res) => {
         if (cart === 'error') {
             res.json({error:`No se encuentra el Carrito con ID ${id}...`})
         } else {
-            // Muestra el Producto encontrado.
+            // Muestra el Carrito encontrado.
             res.json(cart)
         }
     }

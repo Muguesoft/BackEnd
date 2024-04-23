@@ -64,10 +64,20 @@ class productManager{
                 return 'Debe ingresar un stock del producto mayor ó igual a 0'
             }
 
+            // Validacion de status true.
+            if (product.status !== true) {
+                return 'Debe ingresar un Status Verdadero'
+            }
+
+            // Validacion de categoria.
+            if (!product.category) {
+                return 'Debe ingresar una categoría del producto'
+            }
+
             //////////////////
             // Lee archivo. //
             //////////////////
-            let products = await this.getProducts()
+            const products = await this.getProducts()
 
             // Valida que no exista el codigo.
             if (products.find(productos => productos.code === product.code)){
@@ -83,7 +93,7 @@ class productManager{
             products.push(product)
 
             // Escribe el archivo.
-            let resp = this.writeProducts(products)
+            const resp = this.writeProducts(products)
             
             // Retorna respuesta de funcion de escritura.
             return resp
@@ -110,7 +120,7 @@ class productManager{
     // INICIO METODO PARA DEVOLVER PRODUCTOS.
     async getProducts(limit) {
         try {
-            let datos = await fs.readFile(this.productsFile, 'utf8')
+            const datos = await fs.readFile(this.productsFile, 'utf8')
 
             let products = JSON.parse(datos)
 
@@ -138,7 +148,7 @@ class productManager{
         //////////////////
         // Lee archivo. //
         //////////////////
-        let products = await this.getProducts()
+        const products = await this.getProducts()
 
         let productFind
         let message
@@ -167,7 +177,7 @@ class productManager{
         try {
 
             // Leer archivo de productos.
-            let products = await this.getProducts()
+            const products = await this.getProducts()
 
             // Busca el indice dentro del array con el ID a borrar.
             const index = products.findIndex((product) => product.id === id)
@@ -178,7 +188,7 @@ class productManager{
                 products.splice(index,1)
 
                 // Escribe el archivo.
-                let resp = this.writeProducts(products)
+                const resp = this.writeProducts(products)
                 return resp
             } else {
                 return `El ID ingresado ${id} no existe; por lo tanto es imposible borrar`
@@ -199,7 +209,7 @@ class productManager{
         
         try {
             // Leer archivo de productos.
-            let products = await this.getProducts()
+            const products = await this.getProducts()
 
             // Busca el indice dentro del array con el ID a borrar.
             const index = products.findIndex((product) => product.id === id)

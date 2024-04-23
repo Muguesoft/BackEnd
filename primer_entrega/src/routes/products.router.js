@@ -89,6 +89,10 @@ router.post('/products', async (req, res) => {
     try {
         const product = req.body; // Se espera que el cuerpo de la solicitud contenga los datos del nuevo producto
 
+        if (!product.thumbnails) {
+            product.thumbnails = []
+        }
+        
         const resp = await manager.addProduct(product);
 
         if (resp === 'ok') {

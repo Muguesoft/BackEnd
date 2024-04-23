@@ -6,15 +6,23 @@
     "thumbnail": "Sin imagen 1",
     "code": "c1",
     "stock": 10,
+    "status": true,
+    "category": "Indumentaria",
+    "thumbnails": [],
     "id": 1
   },
   {
-    "title": "act 2",
-    "description": "pr2",
-    "price": 2,
-    "thumbnail": "thumbnail22",
-    "code": "c2222",
-    "stock": 200,
+    "title": "nuevoxxx",
+    "description": "pr nuevo",
+    "price": 8,
+    "thumbnail": [
+      "thumbnail22"
+    ],
+    "code": "cxxxx",
+    "stock": 800707,
+    "status": true,
+    "category": "Accesorios",
+    "thumbnails": [],
     "id": 2
   },
   {
@@ -24,6 +32,9 @@
     "thumbnail": "Sin imagen 3",
     "code": "c3",
     "stock": 200,
+    "status": true,
+    "category": "Indumentaria",
+    "thumbnails": [],
     "id": 3
   },
   {
@@ -33,6 +44,9 @@
     "thumbnail": "Sin imagen 4",
     "code": "c4",
     "stock": 40,
+    "status": true,
+    "category": "Indumentaria",
+    "thumbnails": [],
     "id": 4
   },
   {
@@ -42,6 +56,9 @@
     "thumbnail": "Sin imagen 5",
     "code": "c5",
     "stock": 50,
+    "status": true,
+    "category": "Indumentaria",
+    "thumbnails": [],
     "id": 5
   },
   {
@@ -51,6 +68,9 @@
     "thumbnail": "Sin imagen 6",
     "code": "c6",
     "stock": 60,
+    "status": true,
+    "category": "Indumentaria",
+    "thumbnails": [],
     "id": 6
   },
   {
@@ -60,16 +80,10 @@
     "thumbnail": "Sin imagen 7",
     "code": "c7",
     "stock": 70,
+    "status": true,
+    "category": "Indumentaria",
+    "thumbnails": [],
     "id": 7
-  },
-  {
-    "title": "producto 9",
-    "description": "Este es un producto prueba9",
-    "price": 90,
-    "thumbnail": "Sin imagen 9",
-    "code": "c9",
-    "stock": 90,
-    "id": 9
   },
   {
     "title": "producto 10",
@@ -78,6 +92,9 @@
     "thumbnail": "Sin imagen 10",
     "code": "c10",
     "stock": 100,
+    "status": true,
+    "category": "Indumentaria",
+    "thumbnails": [],
     "id": 10
   },
   {
@@ -86,7 +103,9 @@
     "price": 1999,
     "stock": 1999,
     "code": "c12999",
-    "thumbnail": [],
+    "status": true,
+    "category": "Indumentaria",
+    "thumbnails": [],
     "id": 12
   },
   {
@@ -95,7 +114,9 @@
     "price": 1999,
     "stock": 1999,
     "code": "c3999",
-    "thumbnail": [],
+    "status": true,
+    "category": "Indumentaria",
+    "thumbnails": [],
     "id": 13
   },
   {
@@ -104,10 +125,55 @@
     "price": 1999,
     "stock": 1999,
     "code": "curl",
-    "thumbnail": [
-      "url1",
-      "url2"
-    ],
+    "status": true,
+    "category": "Indumentaria",
+    "thumbnails": [],
     "id": 14
+  },
+  {
+    "title": "nuevo prod",
+    "description": "prX",
+    "price": 999,
+    "stock": 999,
+    "code": "newProd",
+    "status": true,
+    "category": "Indumentaria",
+    "id": 15
+  },
+  {
+    "title": "nuevo prod",
+    "description": "prX",
+    "price": 999,
+    "stock": 999,
+    "code": "newProd2",
+    "status": true,
+    "category": "Indumentaria",
+    "thumbnails": [],
+    "id": 16
+  },
+  {
+    "title": "nuevo producto sin thumb",
+    "description": "prX",
+    "price": 999,
+    "stock": 999,
+    "code": "newProd3",
+    "status": true,
+    "category": "Indumentaria",
+    "id": 17,
+    "thumbnails": []
+  },
+  {
+    "title": "nuevo producto sin thumb",
+    "description": "prX",
+    "price": 999,
+    "stock": 999,
+    "code": "newProdx",
+    "status": true,
+    "category": "Indumentaria",
+    "thumbnails": [
+      "thm1",
+      "thm2"
+    ],
+    "id": 18
   }
 ]
