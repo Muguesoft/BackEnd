@@ -3,7 +3,6 @@ import xphandlebars  from 'express-handlebars';
 import __dirname from './utils.js'
 import { Server } from 'socket.io'
 import productManager from './managers/ProductManager.js';
-import Swal from 'sweetalert2';
 
 import productsRouter from './routes/products.router.js'
 
