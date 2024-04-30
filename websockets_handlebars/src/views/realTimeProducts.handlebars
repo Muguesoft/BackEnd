@@ -1,0 +1,142 @@
+<h1>Productos en Tiempo Real</h1>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>CODIGO</th>
+            <th>TITULO</th>
+            <th>DESCRIPCION</th>
+            <th>CATEGORIA</th>
+            <th>STOCK</th>
+            <th>PRECIO</th>
+        </tr>
+    </thead>
+    <tbody id="productTableBody">
+        
+    </tbody>
+</table>
+
+<h2>Agregar Productos</h2>
+<form id="addProductForm">
+    <input type="text" name="code" placeholder="Código">
+    <input type="text" name="title" placeholder="Título">
+    <input type="text" name="description" placeholder="Descripción">
+    <input type="text" name="category" placeholder="Categoría">
+    <input type="number" name="stock" placeholder="Stock">
+    <input type="number" name="price" placeholder="Precio">
+    <button type="submit">Agregar</button>
+</form>
+
+<h2>Borrar Productos</h2>
+<form id="deleteProductForm">
+    <input type="text" name="productId" placeholder="ID Producto a borrar">
+    <button type="submit">Borrar</button>
+</form>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    const socket = io();
+    const productTableBody = document.getElementById('productTableBody');
+
+    // Manejar evento de conexión
+    socket.on('connect', () => {
+        console.log('Conectado al servidor de sockets');
+    });
+
+    socket.on('information', (data) => {
+        console.log(data)
+        let tIcon
+        let tTitle
+
+        if (data.tipo === "I") {
+            tIcon = "success"
+            tTitle = "Información"
+        } else {
+            tIcon = "error"
+            tTitle = "Error"
+        }
+
+        Swal.fire({
+            title: tTitle,
+            text: data.mensaje,
+            icon: tIcon,
+            timer: 3000})
+    });
+
+    // Manejar evento de productos iniciales
+    socket.on('initialProducts', (products) => {
+        // Limpiar la tabla antes de agregar productos
+        productTableBody.innerHTML = '';
+
+        // Agregar cada producto a la tabla
+        products.forEach(product => {
+            const row = document.createElement('tr');
+            // Establecer el atributo data-id en el elemento <tr>
+            row.setAttribute('data-id', product.id);
+
+            row.innerHTML = `
+                <td>${product.id}</td>
+                <td>${product.code}</td>
+                <td>${product.title}</td>
+                <td>${product.description}</td>
+                <td>${product.category}</td>
+                <td>${product.stock}</td>
+                <td>${product.price}</td>
+            `;
+            productTableBody.appendChild(row);
+        });
+    });
+
+    // Manejar evento de nuevo producto
+    socket.on('newProduct', (product) => {
+        const row = document.createElement('tr');
+        
+        // Establecer el atributo data-id en el elemento <tr>
+        row.setAttribute('data-id', product.id);
+
+        row.innerHTML = `
+            <td>${product.id}</td>
+            <td>${product.code}</td>
+            <td>${product.title}</td>
+            <td>${product.description}</td>
+            <td>${product.category}</td>
+            <td>${product.stock}</td>
+            <td>${product.price}</td>
+        `;
+        productTableBody.appendChild(row);
+    });
+
+    // Manejar evento de eliminación de producto
+    socket.on('deleteProduct', (productId) => {
+        const rowToDelete = document.querySelector(`tr[data-id="${productId}"]`);
+        
+        if (rowToDelete) {
+            rowToDelete.remove();
+        } 
+    });
+
+    // Manejar envío del formulario de agregar producto
+    document.getElementById('addProductForm').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const productData = {};
+        formData.forEach((value, key) => {
+            productData[key] = value;
+        });
+        productData.status = true
+        productData.thumbnails = []
+        socket.emit('addProduct', productData);
+        event.target.reset();
+    });
+
+    // Manejar envío del formulario de eliminar producto
+    document.getElementById('deleteProductForm').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const productId = event.target.productId.value;
+        
+        socket.emit('deleteProduct', productId);
+        event.target.reset();
+    });
+</script>

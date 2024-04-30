@@ -1,0 +1,115 @@
+[
+  {
+    "title": "producto 1",
+    "description": "Este es un producto prueba1",
+    "price": 10,
+    "thumbnail": "Sin imagen 1",
+    "code": "c1",
+    "stock": 10,
+    "status": true,
+    "category": "Indumentaria",
+    "thumbnails": [],
+    "id": 1
+  },
+  {
+    "title": "nuevoxxx",
+    "description": "pr nuevo",
+    "price": 8,
+    "thumbnail": [
+      "thumbnail22"
+    ],
+    "code": "cxxxx",
+    "stock": 800707,
+    "status": true,
+    "category": "Accesorios",
+    "thumbnails": [],
+    "id": 2
+  },
+  {
+    "title": "act z2",
+    "description": "prz2",
+    "price": 1999,
+    "stock": 1999,
+    "code": "c3999",
+    "status": true,
+    "category": "Indumentaria",
+    "thumbnails": [],
+    "id": 13
+  },
+  {
+    "title": "nuevo prod",
+    "description": "prX",
+    "price": 999,
+    "stock": 999,
+    "code": "newProd",
+    "status": true,
+    "category": "Indumentaria",
+    "id": 15
+  },
+  {
+    "title": "nuevo prod",
+    "description": "prX",
+    "price": 999,
+    "stock": 999,
+    "code": "newProd2",
+    "status": true,
+    "category": "Indumentaria",
+    "thumbnails": [],
+    "id": 16
+  },
+  {
+    "title": "nuevo producto sin thumb",
+    "description": "prX",
+    "price": 999,
+    "stock": 999,
+    "code": "newProd3",
+    "status": true,
+    "category": "Indumentaria",
+    "id": 17,
+    "thumbnails": []
+  },
+  {
+    "id": 18,
+    "code": "C345",
+    "title": "as",
+    "description": "sdasd",
+    "category": "indumentaria",
+    "stock": "100",
+    "price": "100",
+    "status": true,
+    "thumbnails": []
+  },
+  {
+    "id": 20,
+    "code": "avdfrt",
+    "title": "zsd",
+    "description": "asd",
+    "category": "indumentaria",
+    "stock": "100",
+    "price": "100",
+    "status": true,
+    "thumbnails": []
+  },
+  {
+    "code": "I3",
+    "title": "ProcI3",
+    "description": "ProcessorI3",
+    "category": "Electronica",
+    "stock": "15",
+    "price": "14586",
+    "status": true,
+    "thumbnails": [],
+    "id": 21
+  },
+  {
+    "code": "I7",
+    "title": "ProcI7",
+    "description": "Processor I7",
+    "category": "electronica",
+    "stock": "14",
+    "price": "7894",
+    "status": true,
+    "thumbnails": [],
+    "id": 22
+  }
+]
