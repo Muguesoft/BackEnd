@@ -6,6 +6,7 @@ const productsRouter = Router();
 // INSTANCIACION DE CLASE PRODUCTMANAGER.
 const pManager = new productManager('',true)
 
+/*
 productsRouter.get('/', async (req, res) => {
     try {
         const products = await pManager.getProducts()
@@ -13,7 +14,7 @@ productsRouter.get('/', async (req, res) => {
     } catch (error) {
         console.log(error)
     }
-})
+})*/
 
 
 // GET ALL PRODUCTS.
@@ -31,6 +32,21 @@ productsRouter.get('/products',async (req,res) => {
         }
 
         res.json(products)
+    }
+    catch(error){
+        res.status(500).json({error: "Error recuperando productos"})
+    }
+})
+
+// GET ONE PRODUCT.
+productsRouter.get('/products/:pid',async (req,res) => {
+    try{
+        const { pid } = req.params
+
+        // Muestra producto.
+        const product = await pManager.getProductByIdCode(pid,true)    
+
+        res.json(product)
     }
     catch(error){
         res.status(500).json({error: "Error recuperando productos"})
@@ -61,8 +77,9 @@ productsRouter.post('/products', async (req, res) => {
 
 
 productsRouter.delete('/products/:pid', async (req, res) => {
-    const { pid } = req.params
     try{
+        const { pid } = req.params
+
         const resp = await pManager.deleteProductById(pid);
         res.json({ message: resp });
     }

@@ -3,6 +3,7 @@
 
 import fs from 'fs/promises';
 import productModel from './models/products.model.js';
+import mongoose from 'mongoose';
 
 // CLASE PRODUCTMANAGER.
 class productManager{
@@ -195,8 +196,6 @@ class productManager{
                     product = await productModel.find({"code":idCode})
                     
                     if (product.length > 0) {
-                        console.log('lenbycode',product.length);
-                        console.log('lenbycode',product);
                         return product
                     } else {
                         return 'no encontrado'
@@ -241,8 +240,15 @@ class productManager{
     async deleteProductById(id){
         try {
             if (this.db_io) {
-                const product = await productModel.deleteOne({ _id: id })
                 
+                // Validar si el ID es un ObjectId válido
+                if (!mongoose.Types.ObjectId.isValid(id)) {
+                    return `El ID ingresado ${id} no es un ObjectId válido`
+                }
+
+                // Intenta borrar.
+                const product = await productModel.deleteOne({ _id: id })
+
                 if (product.deletedCount > 0) {
                     return `Producto con ID ${id} borrado correctamente`
                 } else {

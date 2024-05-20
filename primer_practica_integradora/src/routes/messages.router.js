@@ -26,14 +26,14 @@ messagesRouter.post('/messages', async (req, res) => {
 
         const resp = await mManager.addMessage(message);
 
-        if (resp === 'ok') {
-            res.json({ message: 'Mensaje agregado correctamente' });
-        } else {
-            // Muestra error.
-            res.json({ error: resp });
+        if (resp.error) {
+            throw new Error(resp.message)
         }
+        
+        res.json({ message: 'Mensaje agregado correctamente:', resp });
+
     } catch (error) {
-        res.status(500).json({ error: 'Error agregando mensaje...' });
+        res.status(500).json({ error: 'Error agregando mensaje...', mensaje: error.message });
     }
 });
 
@@ -49,5 +49,11 @@ messagesRouter.delete('/messages/:mid', async (req, res) => {
         res.status(500).json({ error: 'Error borrando mensaje...' });
     }
 })
+
+// Ruta para renderizar la vista chat.handlebars
+messagesRouter.get('/chat', (req, res) => {
+    res.render('chat');
+});
+
 
 export default messagesRouter;

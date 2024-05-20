@@ -1,5 +1,7 @@
 // ESTA CLASE FUNCIONARA CON MONGO ATLAS.
 import messageModel from './models/messages.model.js';
+import mongoose from 'mongoose';
+
 
 // CLASE MESSAGEMANAGER.
 class messageManager{
@@ -15,10 +17,13 @@ class messageManager{
             const newMessage = await messageModel.create(message)
             
             // Retorna respuesta de funcion de escritura.
-            return 'ok'
+            return newMessage
 
         } catch (error) {
-            return error
+            if (error.name === 'ValidationError') {
+                return { error: true, message: error.message };
+            }
+            return { error: true, message: 'Error desconocido' };
         }
     }
     // FIN METODO PARA AGREGAR MESSAGE.
@@ -43,6 +48,11 @@ class messageManager{
     async deleteMessageById(id){
         try {
             
+            // Validar si el ID es un ObjectId válido
+            if (!mongoose.Types.ObjectId.isValid(id)) {
+                return `El ID ingresado ${id} no es un ObjectId válido`
+            }
+
             const message = await messageModel.deleteOne({ _id: id })
                 
             if (message.deletedCount > 0) {

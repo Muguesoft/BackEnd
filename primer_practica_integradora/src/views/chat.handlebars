@@ -1,0 +1,102 @@
+<h1>Mensajes</h1>
+<table>
+    <thead>
+        <tr>
+            <th>USUARIO</th>
+            <th>MENSAJE</th>
+            <th>ID</th>
+        </tr>
+    </thead>
+    <tbody id="messageTableBody">
+        
+    </tbody>
+</table>
+
+<h2>Enviar mensaje</h2>
+<form id="addMessageForm">
+    <input type="text" name="user" placeholder="Mail del usuario">
+    <input type="text" name="message" placeholder="Mensaje">
+    <button type="submit">Enviar</button>
+</form>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    const socket = io();
+    const messageTableBody = document.getElementById('messageTableBody');
+
+    // Manejar evento de conexión
+    socket.on('connect', () => {
+        console.log('Conectado al servidor de sockets');
+    });
+
+    socket.on('information', (data) => {
+        
+        let tIcon
+        let tTitle
+
+        if (data.tipo === "I") {
+            tIcon = "success"
+            tTitle = "Información"
+        } else {
+            tIcon = "error"
+            tTitle = "Error"
+        }
+
+        Swal.fire({
+            title: tTitle,
+            text: data.mensaje,
+            icon: tIcon,
+            timer: 3000})
+    });
+
+    // Manejar evento de mensajes iniciales
+    socket.on('initialMessages', (messages) => {
+        // Limpiar la tabla antes de agregar mensajes
+        messageTableBody.innerHTML = '';
+
+        // Agregar cada message a la tabla
+        messages.forEach(message => {
+            const row = document.createElement('tr');
+            // Establecer el atributo data-id en el elemento <tr>
+            row.setAttribute('data-id', message._id);
+
+            row.innerHTML = `
+                <td>${message.user}</td>
+                <td>${message.message}</td>
+                <td>${message._id}</td>
+            `;
+            messageTableBody.appendChild(row);
+        });
+    });
+
+    // Manejar evento de nuevo mensage
+    socket.on('newMessage', (message) => {
+        const row = document.createElement('tr');
+        
+        // Establecer el atributo data-id en el elemento <tr>
+        row.setAttribute('data-id', message._id);
+
+        row.innerHTML = `
+            <td>${message.user}</td>
+            <td>${message.message}</td>
+            <td>${message._id}</td>
+        `;
+        messageTableBody.appendChild(row);
+    });
+
+    
+    // Manejar envío del formulario de agregar mensaje
+    document.getElementById('addMessageForm').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const messageData = {};
+        formData.forEach((value, key) => {
+            messageData[key] = value;
+        });
+        socket.emit('addMessage', messageData);
+        event.target.reset();
+    });
+
+</script>
