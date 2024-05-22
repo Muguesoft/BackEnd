@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 
 
 // CLASE MESSAGEMANAGER.
-class messageManager{
+class messageManagerDB{
     constructor() {
     }
 
@@ -71,4 +71,4 @@ class messageManager{
 }
 
 
-export default messageManager;
+export default messageManagerDB;

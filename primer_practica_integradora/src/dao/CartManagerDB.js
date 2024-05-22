@@ -1,15 +1,12 @@
-import fs from 'fs/promises';
-import productManager from './ProductManager.js';
+import productManagerDB from './ProductManagerDB.js';
 import cartModel from './models/carts.model.js';
 import productModel from './models/products.model.js';
 
 // CLASE CARTMANAGER.
-class cartManager{
+class cartManagerDB{
     constructor() {
-        this.productManager = new productManager('',true);
+        this.productManagerDB = new productManagerDB();
     }
-
-    
 
     // METODO QUE PERMITE VALIDAR SI LOS ID DE PRODUCTOS
     // ENVIADOS EN EL BODY EXISTEN EN LA COLECCION products de MongoAtlas.
@@ -63,29 +60,6 @@ class cartManager{
     }
     // FIN METODO PARA NUEVO CARRITO.
 
-    // METODO PARA INSERTAR UN NUEVO ITEM EN EL CARRITO EXISTENTE.
-    async newItemCart(cartItem) {
-        try {
-            //////////////////
-            // Lee archivo. //
-            //////////////////
-            const carts = await this.getCarts()
-
-            // Inserta nuevo carrito.
-            carts.push(cartItem)
-            
-            // Escribe el archivo.
-            this.writeCarts(carts)
-            
-            // Retorna respuesta de funcion de escritura.
-            return 'ok'    
-        } 
-        catch (error) {
-            return 'Error insertando nuevo Item al Carrito'
-        }
-    }
-    
-    
 
     // INICIO METODO PARA DEVOLVER CARRITOS.
     async getCarts() {
@@ -141,49 +115,34 @@ class cartManager{
     async updateCart(cid,pid){
                 
         try {
-            // Racupera carritos por ID.
-            const carts = await this.getCarts()
-
-            // Busca el indice dentro del array con el ID a actualizar.
-            const cartIndex = carts.findIndex((cart) => cart.id === cid);
-            if (cartIndex === -1) {
-                throw new Error(`Carrito con ID ${cid} no encontrado`)
+            // Verificar si el producto existe en la base de datos.
+            const productExists = await productModel.find({ _id: { $in: pid } })
+            if (!productExists) {
+                throw new Error(`Producto con ID ${pid} no existe`);
             }
+
+            // Buscar el carrito por su ID.
+            const cart = await cartModel.findById(cid);
+            if (!cart) {
+                throw new Error(`Carrito con ID ${cid} no encontrado`);
+            }
+
+            // Buscar el producto en el carrito.
+            const productIndex = cart.products.findIndex(item => item.product.toString() === pid);
             
-            // Recupera esa parte del carrito.
-            const cart = carts[cartIndex]
-
-            // Busca en el carrito seleccionado el producto ingresado por ID.
-            const itemIndex = cart.products.findIndex((product) => product.product === pid)
-
-            // Si no encuentra el indice en el array inserta el producto con cantidad 1.
-            if (itemIndex === -1) {
-
-                // Verifica que el producto exista en el json.
-                const product = await this.productManager.getProductByIdCode(pid,true)
-                if (product === 'ID' || product === 'Código') {
-                    throw new Error(`Producto con ID ${pid} no existe`)
-                }
-
-                // Nuevo item de carrito. 
-                const newItemCart = { product: pid, quantity: 1 }
-
-                // Inserta nuevo carrito.
-                cart.products.push(newItemCart)
-
+            if (productIndex !== -1) {
+                // Incrementar la cantidad si el producto ya existe en el carrito.
+                cart.products[productIndex].quantity += 1;
             } else {
-                // Si el producto existe incrementa la quantity en 1.
-                cart.products[itemIndex].quantity++;
+                // Agregar el producto al carrito si no existe.
+                cart.products.push({ product: pid, quantity: 1 });
             }
 
-            // Actualiza el carrito general
-            carts[cartIndex] = cart
-
-            // Escribe el archivo.
-            this.writeCarts(carts)
+            // Guardar los cambios en la base de datos.
+            await cart.save();
             
-            // Retorna respuesta de funcion de escritura.
-            return 'ok'
+            // Retornar respuesta de éxito.
+            return 'ok';
         }
         catch (error) {
             return error.toString();
@@ -192,4 +151,4 @@ class cartManager{
     // FIN METODO PARA ACTUALIZAR CARRITO POR ID.
 }
 
-export default cartManager;
+export default cartManagerDB;

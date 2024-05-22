@@ -1,7 +1,7 @@
 import express from 'express';
 import productsRouter from './routes/products.router.js';
 import messagesRouter from './routes/messages.router.js';
-import messageManager from './dao/MessageManager.js';
+import messageManagerDB from './dao/MessageManagerDB.js';
 import cartsRouter from './routes/carts.router.js';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
@@ -50,7 +50,7 @@ mongoose.connect(mongo_URI)
 })*/
 
 // Crear una instancia de MessageManager.
-const messageClass = new messageManager();
+const messageClass = new messageManagerDB();
 
 socketServer.on('connection', async socket => {
     console.log("Nuevo cliente conectado")

@@ -1,10 +1,10 @@
 import { Router } from "express";
-import messageManager from "../dao/MessageManager.js";
+import messageManagerDB from "../dao/MessageManagerDB.js";
 
 const messagesRouter = Router();
 
 // INSTANCIACION DE CLASE MESSAGEMANAGER.
-const mManager = new messageManager()
+const mManager = new messageManagerDB()
 
 
 // GET ALL MESSAGES.

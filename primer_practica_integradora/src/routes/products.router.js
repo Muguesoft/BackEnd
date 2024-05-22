@@ -1,10 +1,10 @@
 import { Router } from "express";
-import productManager from "../dao/ProductManager.js";
+import productManagerDB from "../dao/ProductManagerDB.js";
 
 const productsRouter = Router();
 
 // INSTANCIACION DE CLASE PRODUCTMANAGER.
-const pManager = new productManager('',true)
+const pManager = new productManagerDB('',true)
 
 /*
 productsRouter.get('/', async (req, res) => {

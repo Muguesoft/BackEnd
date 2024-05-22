@@ -1,10 +1,10 @@
 import { Router } from "express";
-import cartManager from "../dao/CartManager.js";
+import cartManagerDB from "../dao/CartManagerDB.js";
 
 const cartsRouter = Router();
 
 // INSTANCIACION DE CLASE CARTMANAGER.
-const cManager = new cartManager()
+const cManager = new cartManagerDB()
 
 
 // POST NEW CART.
@@ -81,8 +81,8 @@ cartsRouter.delete('/carts/:cid', async (req,res) => {
 // POST UPDATE CART.
 cartsRouter.post('/carts/:cid/products/:pid', async (req, res) => {
     try {
-        const cid = parseInt(req.params.cid)
-        const pid = parseInt(req.params.pid)
+        const cid = req.params.cid
+        const pid = req.params.pid
         
         const resp = await cManager.updateCart(cid,pid);
 
