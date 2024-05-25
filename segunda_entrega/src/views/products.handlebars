@@ -1,0 +1,82 @@
+<h1>Productos</h1>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Descripción</th>
+            <th>Categoría</th>
+            <th>Stock</th>
+            <th>Precio</th>
+            <th>Acción</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each products}}
+        <tr>
+            <td>{{this._id}}</td>
+            <td>{{this.title}}</td>
+            <td>{{this.description}}</td>
+            <td>{{this.category}}</td>
+            <td>{{this.stock}}</td>
+            <td>{{this.price}}</td>
+            <td><button class="add-to-cart" data-id="{{this._id}}">+ Carrito</button></td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+<div>
+    {{#if hasPrevPage}}
+    <a href="/views/products?page={{prevPage}}&limit={{limit}}&sort={{sort}}&query={{query}}&category={{category}}&availability={{availability}}">Anterior</a>
+    {{/if}}
+
+    Página {{currentPage}} de {{totalPages}}
+
+    {{#if hasNextPage}}
+    <a href="/views/products?page={{nextPage}}&limit={{limit}}&sort={{sort}}&query={{query}}&category={{category}}&availability={{availability}}">Siguiente</a>
+    {{/if}}
+</div>
+
+<button id="view-cart">Ver Carrito</button>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const buttons = document.querySelectorAll('.add-to-cart')
+        const cartId = '664d54a75b920189e88780be'
+
+        buttons.forEach(button => {
+            button.addEventListener('click', async () => {
+                const productId = button.getAttribute('data-id');
+                try {
+                    
+                    const response = await fetch(`/api/carts/${cartId}/products/${productId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ quantity: 1 })
+                    });
+
+                    const data = await response.json();
+                    if (response.ok) {
+                        alert('Product added to cart successfully!');
+                    } else {
+                        alert(`Error: ${data.error}`);
+                    }
+
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('An error occurred while adding the product to the cart.');
+                }
+            })
+        })
+
+        const viewCartButton = document.getElementById('view-cart');
+            viewCartButton.addEventListener('click', () => {
+                window.location.href = `/views/carts/${cartId}`;
+            });
+    })
+</script>
+
+
