@@ -77,9 +77,27 @@ sessionRouter.post('/register', passport.authenticate('local-register', {
 sessionRouter.get("/github", passport.authenticate("github",{scope:["user:email"]}),async(req,res)=>{})
 
 sessionRouter.get("/githubcallback",passport.authenticate("github",{failureRedirect:"/login"}),async(req,res)=>{
-    req.session.user=req.user
-    res.redirect("/")
-})
+    // Extraer los datos del usuario de req.user
+    console.log('USUARIO',req.user);
+    
+    const { first_name, last_name, email } = req.user;
+    //const { value: email } = emails[0];
+    
+    // Crear un objeto con los datos del usuario
+    const user = {
+        first_name: first_name,
+        last_name: last_name,
+        email: email,
+        age: 20
+    };
+
+    // Asignar el objeto de usuario a req.session.user
+    req.session.user = user;
+
+    // Redirigir al usuario a la página de inicio
+    //res.redirect("/");
+    res.redirect("/views/products")
+});
 
 sessionRouter.post('/logout', (req, res) => {
     req.logout();

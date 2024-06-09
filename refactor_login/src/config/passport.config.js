@@ -3,7 +3,6 @@ import GitHubStrategy from 'passport-github2'
 import userService from '../dao/models/user.model.js'
 import bcrypt from 'bcrypt';
 import LocalStrategy from 'passport-local';
-//import { createHash, isValidPassword } from "../utils/utils.js";
 
 
 const initializePassport = () => {
@@ -14,7 +13,7 @@ const initializePassport = () => {
         callbackURL: "http://localhost:8080/api/sessions/githubcallback"
     }, async (accessToken, refreshToken, profile, done) => {
         try {
-            console.log(profile)
+            console.log('PROFILE',profile)
             let user = await userService.findOne({ email: profile._json.email })
             if (!user) {
                 let newUser = {

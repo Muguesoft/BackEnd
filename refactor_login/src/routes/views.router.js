@@ -8,7 +8,7 @@ const viewsRouter = Router();
 const pManager = new productManagerDB();
 const cManager = new cartManagerDB;
 
-viewsRouter.get('/products', async (req, res) => {
+viewsRouter.get('/views/products', async (req, res) => {
     try {
         const { limit, page, sort, query, category, availability } = req.query;
         
@@ -46,7 +46,7 @@ viewsRouter.get('/products', async (req, res) => {
 });
 
 // Ruta para ver los productos en un carrito específico
-viewsRouter.get('/carts/:cid', async (req, res) => {
+viewsRouter.get('/views/carts/:cid', async (req, res) => {
     try {
         const { cid } = req.params;
 
@@ -95,8 +95,14 @@ viewsRouter.get('/', (req, res) => {
 });
 
 viewsRouter.post('/logout', (req, res) => {
-    req.logout();
-    res.redirect('/login');
+    req.logout(function(err) {
+        if (err) {
+            // Manejar el error si lo hay
+            return next(err);
+        }
+        // Redirigir al usuario a la página de inicio de sesión después de cerrar la sesión
+        res.redirect('/login');
+    });
 });
 
 export default viewsRouter;
