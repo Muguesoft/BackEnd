@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import passport from 'passport';
+import passport from '../../config/passport.strategy.js'
 //import { createHash } from '../../utils/utils.js';
 //import User from '../../dao/models/user.model.js';
 

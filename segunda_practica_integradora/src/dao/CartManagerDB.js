@@ -60,6 +60,21 @@ class cartManagerDB{
     }
     // FIN METODO PARA NUEVO CARRITO.
 
+    // INICIO METODO PARA CREAR NUEVO CARRITO VACIO.
+    async newEmptyCart() {
+        try {
+            
+            // Nuevo carrito vacio. 
+            const newEmpty = await cartModel.create({ products: [] });
+                       
+            // Retorna respuesta de funcion de escritura.
+            return newEmpty
+
+        } catch (error) {
+            return 'error newEmptyCart'
+        }
+    }
+    // FIN METODO PARA NUEVO CARRITO VACIO.
 
     // INICIO METODO PARA DEVOLVER CARRITOS.
     async getCarts() {

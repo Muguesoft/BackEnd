@@ -11,9 +11,8 @@ import cartsRouter from './routes/carts.router.js';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import __dirname from './utils.js'
-import initializePassport from './config/passport.config.js';
+//import initializePassport from './config/passport.strategy.js';
 import flash from 'express-flash';
-//import initializePassport from './config/passport.js';
 import loginRouter from './routes/login.router.js';
 
 
@@ -53,7 +52,7 @@ app.use(session({
     // cookie: { maxAge: 180 * 60 * 1000 },
 }));
 
-initializePassport()
+
 app.use(passport.initialize())
 app.use(passport.session())
 

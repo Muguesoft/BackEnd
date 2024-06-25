@@ -1,7 +1,8 @@
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
-import { isValidPassword } from '../utils/utils.js';
+import { isValidPassword, createHash } from '../utils/utils.js';
 import User from '../dao/models/user.model.js';
+import cartManagerDB from '../dao/CartManagerDB.js';
 
 passport.use('local-login', new LocalStrategy({
     usernameField: 'email',
@@ -9,11 +10,12 @@ passport.use('local-login', new LocalStrategy({
 }, async (email, password, done) => {
     try {
         const user = await User.findOne({ email });
-
+        
         if (!user) {
             return done(null, false, { message: 'Usuario no encontrado.' });
         }
-
+        
+        
         if (!isValidPassword(user, password)) {
             return done(null, false, { message: 'Contraseña incorrecta.' });
         }
@@ -37,14 +39,22 @@ passport.use('local-register', new LocalStrategy({
             return done(null, false, { message: 'El correo electrónico ya está registrado.' });
         }
 
+        const pass_hash = createHash(password)
+        
+        // Crea un nuevo carrito vacio.
+        // INSTANCIACION DE CLASE CARTMANAGER.
+        const cManager = new cartManagerDB()
+        const newEmpty = await cManager.newEmptyCart()
+        
         const newUser = new User({
             first_name,
             last_name,
             email,
             age,
-            password: createHash(password)
+            password: pass_hash,
+            cart: newEmpty.id
         });
-
+        
         await newUser.save();
 
         return done(null, newUser);
